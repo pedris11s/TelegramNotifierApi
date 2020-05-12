@@ -21,8 +21,7 @@ namespace TelegramBotNotifierApi
 
             var botService = new NotifierBotService();
             
-            Thread.Sleep(int.MaxValue);
-            // CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

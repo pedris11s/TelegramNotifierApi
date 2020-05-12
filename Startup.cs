@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore;
+using Microsoft.OpenApi.Models;
 
 namespace TelegramBotNotifierApi
 {
@@ -26,6 +28,15 @@ namespace TelegramBotNotifierApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TelegramBotNotifierApi", Version = "v1", Contact = new OpenApiContact{
+                    Name = "PeterDev",
+                    Url = new Uri("http://peterdev.me")
+                }});
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +51,12 @@ namespace TelegramBotNotifierApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c=>    
+            {    
+                c.SwaggerEndpoint("/swagger/v1/swagger.json","TelegramBotNotifierApi");    
+            }); 
 
             app.UseHttpsRedirection();
             app.UseMvc();

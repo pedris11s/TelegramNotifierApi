@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using TelegramBotNotifierApi.Services;
 
 namespace TelegramBotNotifierApi
 {
@@ -14,7 +16,13 @@ namespace TelegramBotNotifierApi
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            string accessToken = File.ReadAllText("key");
+            Environment.SetEnvironmentVariable("ACCESS_TOKEN", accessToken);
+
+            var botService = new NotifierBotService();
+            
+            Thread.Sleep(int.MaxValue);
+            // CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

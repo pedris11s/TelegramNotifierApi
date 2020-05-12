@@ -7,7 +7,7 @@ namespace TelegramBotNotifierApi.Services
 {
     public interface INotifierBotService
     {
-        Task SendMessage(string message);
+        Task SendMessage(string chatId, string message);
     }
 
     public class NotifierBotService : INotifierBotService
@@ -35,12 +35,13 @@ namespace TelegramBotNotifierApi.Services
             );
         }
 
-        public async Task SendMessage(string message) 
+        public async Task SendMessage(string chatId, string message) 
         {
             Console.WriteLine($"Sending message: {message}");
-            
+
             await _botClient.SendTextMessageAsync(
-                chatId: Environment.GetEnvironmentVariable("TEST_CHAT_ID"),
+                // chatId: Environment.GetEnvironmentVariable("TEST_CHAT_ID"),
+                chatId: chatId,
                 text: message
             );
         }

@@ -24,7 +24,7 @@ namespace TelegramBotNotifierApi.Controllers
         [Route("/[controller]/send_message")]
         public void SendMessage([FromBody]ApiRequest request)
         {
-            _notifierService.SendMessage(request.Message).GetAwaiter().GetResult();
+            _notifierService.SendMessage(request.ChatId, request.Message).GetAwaiter().GetResult();
         }
     }
 }

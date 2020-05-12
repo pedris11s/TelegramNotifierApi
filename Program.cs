@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TelegramBotNotifierApi.Services;
+using TelegramBotNotifierApi.Models;
+using Newtonsoft.Json;
 
 namespace TelegramBotNotifierApi
 {
@@ -16,8 +18,10 @@ namespace TelegramBotNotifierApi
     {
         public static void Main(string[] args)
         {
-            string accessToken = File.ReadAllText("key");
-            Environment.SetEnvironmentVariable("ACCESS_TOKEN", accessToken);
+            var config = JsonConvert.DeserializeObject<EnvironmentConfig>(File.ReadAllText("key.json"));
+            
+            Environment.SetEnvironmentVariable("ACCESS_TOKEN", config.AccessToken);
+            Environment.SetEnvironmentVariable("TEST_CHAT_ID", config.TestChatId);
 
             var botService = new NotifierBotService();
             

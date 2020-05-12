@@ -23,7 +23,7 @@ namespace TelegramBotNotifierApi
             Environment.SetEnvironmentVariable("ACCESS_TOKEN", config.AccessToken);
             Environment.SetEnvironmentVariable("TEST_CHAT_ID", config.TestChatId);
 
-            var botService = new NotifierBotService();
+            // var botService = new NotifierBotService();
             
             CreateWebHostBuilder(args).Build().Run();
         }

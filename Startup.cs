@@ -10,8 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore;
 using Microsoft.OpenApi.Models;
+using TelegramBotNotifierApi.Services;
 
 namespace TelegramBotNotifierApi
 {
@@ -27,8 +27,6 @@ namespace TelegramBotNotifierApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TelegramBotNotifierApi", Version = "v1", Contact = new OpenApiContact{
@@ -37,6 +35,9 @@ namespace TelegramBotNotifierApi
                 }});
             });
 
+            services.AddSingleton<INotifierBotService, NotifierBotService>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

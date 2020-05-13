@@ -37,7 +37,7 @@ namespace TelegramBotNotifierApi.Services
             
             await _botClient.SendTextMessageAsync(
                 chatId: e.Message.Chat,
-                text: "You said:\n" + e.Message.Text
+                text: "No pierda su tiempo...solo se decir esto, aqui el que habla soy yo, usted solo lee!!!"
             );
 
             // Console.WriteLine(JsonConvert.SerializeObject(e.Message));

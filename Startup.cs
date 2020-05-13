@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+
 using TelegramBotNotifierApi.Services;
+using TelegramBotNotifierApi.Models;
+
 
 namespace TelegramBotNotifierApi
 {
@@ -56,6 +61,10 @@ namespace TelegramBotNotifierApi
         {
             if (env.IsDevelopment())
             {
+                var config = JsonConvert.DeserializeObject<EnvironmentConfig>(File.ReadAllText("key.json"));
+                Environment.SetEnvironmentVariable("ACCESS_TOKEN", config.AccessToken);
+                Environment.SetEnvironmentVariable("TEST_CHAT_ID", config.TestChatId);
+                
                 app.UseDeveloperExceptionPage();
             }
             else

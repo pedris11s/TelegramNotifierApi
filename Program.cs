@@ -12,19 +12,13 @@ using TelegramBotNotifierApi.Services;
 using TelegramBotNotifierApi.Models;
 using Newtonsoft.Json;
 
+
 namespace TelegramBotNotifierApi
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            var config = JsonConvert.DeserializeObject<EnvironmentConfig>(File.ReadAllText("key.json"));
-            
-            Environment.SetEnvironmentVariable("ACCESS_TOKEN", config.AccessToken);
-            Environment.SetEnvironmentVariable("TEST_CHAT_ID", config.TestChatId);
-
-            // var botService = new NotifierBotService();
-            
             CreateWebHostBuilder(args).Build().Run();
         }
 

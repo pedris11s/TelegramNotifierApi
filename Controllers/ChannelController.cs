@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 // using System.Web.Http;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,11 +26,11 @@ namespace TelegramBotNotifierApi.Controllers
 
         [HttpPost]
         [Route("/[controller]/create")]
-        public IActionResult Create([FromBody]ChannelInput input)
+        public ActionResult<Channel> Create(Channel input)
         {
             try
             {
-                var response = _channelService.Create(input.ChannelName);
+                var response = _channelService.Create(input);
                 if(response != null)
                     return Ok(response);
                 
@@ -39,7 +40,24 @@ namespace TelegramBotNotifierApi.Controllers
             {
                 return BadRequest();
             }
+        }
 
+        [HttpPut]
+        [Route("/[controller]/update/{channelId}")]
+        public IActionResult Update(string channelId, List<User> users)
+        {
+            try
+            {
+                var response = _channelService.UpdateUsers(channelId, users);
+                if(response != null)
+                    return Ok(response);
+                
+                return BadRequest();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
         }
         
     }

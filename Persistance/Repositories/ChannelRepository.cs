@@ -10,8 +10,9 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
 {
     public interface IChannelRepository
     {
-        Channel Create(string channelName);
+        Channel Create(Channel channel);
         Channel GetChannel(string channelName);
+        Channel UpdateUsers(string channelId, List<User> users);
     }
 
     public class ChannelRepository : IChannelRepository
@@ -20,11 +21,15 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
         private IMongoDatabase _database;
         private IMongoCollection<Channel> _channels { get; set; }
         
-        public ChannelRepository()
+        public IUserRepository _userRepository;
+        
+        public ChannelRepository(IUserRepository userRepository)
         {
             _client = new MongoClient(Environment.GetEnvironmentVariable("DB_CONECTION_STRING"));
             _database = _client.GetDatabase("NotifierBotDb");
             _channels = _database.GetCollection<Channel>("Channels");
+
+            _userRepository = userRepository;
         }
 
         public Channel GetChannel(string channelName)
@@ -32,19 +37,52 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
             return _channels.Find(u => u.ChannelName == channelName).FirstOrDefault();
         }
 
-        public Channel Create(string channelName)
+        public Channel GetChannelById(string channelId)
+        {
+            return _channels.Find(u => u.Id == channelId).FirstOrDefault();
+        }
+
+        public Channel Create(Channel channel)
         {
             try
             {
-                if(GetChannel(channelName) == null)
+                if(GetChannel(channel.ChannelName) == null)
                 {
-                    var channel = new Channel{
-                        Users = new List<User>(),
-                        ChannelName = channelName   
-                    };
-
+                    if(channel.Users == null)
+                        channel.Users = new List<User>();
+                        
                     _channels.InsertOne(channel);
                     Console.WriteLine($"[INFO] Channel: {channel.ChannelName} saved successfully!");
+                    return channel;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+        }
+
+        public Channel UpdateUsers(string channelId, List<User> users)
+        {
+            try
+            {
+                var channel = GetChannelById(channelId); 
+                if(channel != null)
+                {
+                    var usersInDb = new List<User>();
+                    foreach (var item in users)
+                    {
+                        var user = _userRepository.GetUser(item.Username);
+                        if(user != null)
+                        {
+                            usersInDb.Add(user);
+                        }
+                    }
+
+                    _channels.UpdateOne(p => p.Id == channelId, Builders<Channel>.Update.Set(p => p.Users, usersInDb));
+                    
+                    Console.WriteLine($"[INFO] Channel: {channel.ChannelName} UPDATED successfully!");
                     return channel;
                 }
             }

@@ -8,8 +8,9 @@ namespace TelegramBotNotifierApi.Services
 {
     public interface IChannelService
     {
-        Channel Create(string channelName);
+        Channel Create(Channel channel);
         Channel GetChannel(string channelName);
+        Channel UpdateUsers(string channelId, List<User> users);
     }
 
     public class ChannelService : IChannelService
@@ -21,11 +22,11 @@ namespace TelegramBotNotifierApi.Services
             _channelRepository = channelRepository;
         }
 
-        public Channel Create(string channelName)
+        public Channel Create(Channel channel)
         {
             try
             {
-                return _channelRepository.Create(channelName);
+                return _channelRepository.Create(channel);
             }
             catch(Exception ex)
             {
@@ -39,6 +40,20 @@ namespace TelegramBotNotifierApi.Services
             try
             {
                 var channel = _channelRepository.GetChannel(channelName);
+                return channel;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"[ERROR] GetChannel: {ex.Message}");
+                throw ex;
+            }
+        }
+
+        public Channel UpdateUsers(string channelId, List<User> users)
+        {
+            try
+            {
+                var channel = _channelRepository.UpdateUsers(channelId, users);
                 return channel;
             }
             catch(Exception ex)

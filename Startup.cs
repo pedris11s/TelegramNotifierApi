@@ -15,7 +15,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 using TelegramBotNotifierApi.Services;
-using TelegramBotNotifierApi.Models;
+using TelegramBotNotifierApi.Persistence.Models;
 
 
 namespace TelegramBotNotifierApi
@@ -64,6 +64,7 @@ namespace TelegramBotNotifierApi
                 var config = JsonConvert.DeserializeObject<EnvironmentConfig>(File.ReadAllText("key.json"));
                 Environment.SetEnvironmentVariable("ACCESS_TOKEN", config.AccessToken);
                 Environment.SetEnvironmentVariable("TEST_CHAT_ID", config.TestChatId);
+                Environment.SetEnvironmentVariable("DB_CONECTION_STRING", config.DbConectionString);
                 
                 app.UseDeveloperExceptionPage();
             }

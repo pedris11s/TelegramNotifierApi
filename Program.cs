@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TelegramBotNotifierApi.Services;
-using TelegramBotNotifierApi.Models;
 using Newtonsoft.Json;
 
 

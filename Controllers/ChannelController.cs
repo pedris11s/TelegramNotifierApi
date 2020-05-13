@@ -16,11 +16,30 @@ namespace TelegramBotNotifierApi.Controllers
     [ApiController]
     public class ChannelController : ControllerBase
     {
-        public INotifierBotService _notifierService;
+        public IChannelService _channelService;
 
-        public ChannelController(INotifierBotService notifierService)
+        public ChannelController(IChannelService channelService)
         {
-            _notifierService = notifierService;
+            _channelService = channelService;
+        }
+
+        [HttpPost]
+        [Route("/[controller]/create")]
+        public IActionResult Create([FromBody]ChannelInput input)
+        {
+            try
+            {
+                var response = _channelService.Create(input.ChannelName);
+                if(response != null)
+                    return Ok(response);
+                
+                return BadRequest();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+
         }
         
     }

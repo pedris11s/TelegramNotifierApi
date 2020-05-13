@@ -55,6 +55,8 @@ namespace TelegramBotNotifierApi
             services.AddSingleton<INotifierBotService, NotifierBotService>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IChannelRepository, ChannelRepository>();
+            services.AddSingleton<IChannelService, ChannelService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

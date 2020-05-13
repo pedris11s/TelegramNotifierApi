@@ -1,5 +1,6 @@
 using TelegramBotNotifierApi.Persistence.Models;
 using System;
+using System.Collections.Generic;
 using TelegramBotNotifierApi.Persistence.Repositories;
 using Microsoft.Extensions.Options;
 
@@ -7,6 +8,8 @@ namespace TelegramBotNotifierApi.Services
 {
     public interface IChannelService
     {
+        Channel Create(string channelName);
+        Channel GetChannel(string channelName);
     }
 
     public class ChannelService : IChannelService
@@ -18,15 +21,16 @@ namespace TelegramBotNotifierApi.Services
             _channelRepository = channelRepository;
         }
 
-        public void Create(Channel channel)
+        public Channel Create(string channelName)
         {
             try
             {
-                _channelRepository.Create(channel);
+                return _channelRepository.Create(channelName);
             }
             catch(Exception ex)
             {
                 Console.WriteLine($"[ERROR] Creating channel: {ex.Message}");
+                return null;
             }
         }
 

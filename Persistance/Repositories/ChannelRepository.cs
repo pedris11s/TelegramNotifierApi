@@ -10,7 +10,7 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
 {
     public interface IChannelRepository
     {
-        void Create(Channel channel);
+        Channel Create(string channelName);
         Channel GetChannel(string channelName);
     }
 
@@ -32,20 +32,27 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
             return _channels.Find(u => u.ChannelName == channelName).FirstOrDefault();
         }
 
-        public void Create(Channel channel)
+        public Channel Create(string channelName)
         {
             try
             {
-                if(GetChannel(channel.ChannelName) == null)
+                if(GetChannel(channelName) == null)
                 {
+                    var channel = new Channel{
+                        Users = new List<User>(),
+                        ChannelName = channelName   
+                    };
+
                     _channels.InsertOne(channel);
                     Console.WriteLine($"[INFO] Channel: {channel.ChannelName} saved successfully!");
+                    return channel;
                 }
             }
             catch(Exception ex)
             {
                 throw ex;
             }
+            return null;
         }
     }
 }

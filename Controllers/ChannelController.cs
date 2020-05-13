@@ -26,37 +26,37 @@ namespace TelegramBotNotifierApi.Controllers
 
         [HttpPost]
         [Route("/[controller]/create")]
-        public ActionResult<Channel> Create(Channel input)
+        public ApiResponse Create(Channel input)
         {
             try
             {
                 var response = _channelService.Create(input);
                 if(response != null)
-                    return Ok(response);
+                    return ApiResponses.Success(response);
                 
-                return BadRequest();
+                return ApiResponses.Conflict(input.ChannelName, "Channel already exists!");
             }
             catch(Exception ex)
             {
-                return BadRequest();
+                return ApiResponses.InternalError(null, ex.Message);
             }
         }
 
         [HttpPut]
-        [Route("/[controller]/update/{channelId}")]
-        public IActionResult Update(string channelId, List<User> users)
+        [Route("/[controller]/updateUsers/{channelId}")]
+        public ApiResponse UpdateUsers(string channelId, List<User> users)
         {
             try
             {
                 var response = _channelService.UpdateUsers(channelId, users);
                 if(response != null)
-                    return Ok(response);
+                    return ApiResponses.Success(response);
                 
-                return BadRequest();
+                return ApiResponses.NotFound(channelId);
             }
             catch(Exception ex)
             {
-                return BadRequest();
+                return ApiResponses.InternalError(null, ex.Message);
             }
         }
         

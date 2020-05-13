@@ -24,7 +24,7 @@ namespace TelegramBotNotifierApi.Controllers
         }
         
         [HttpPost]
-        [Route("/[controller]/send_message")]
+        [Route("/[controller]/sendMessage")]
         public IActionResult SendMessage([FromBody]ApiRequest request)
         {
             try

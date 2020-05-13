@@ -1,10 +1,13 @@
 using System;
+using System.Net.Http;
+// using System.Web.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TelegramBotNotifierApi.Services;
 using TelegramBotNotifierApi.Persistence.Models;
+// using IHttpActionResult = System.Web.Http.IHttpActionResult;
 
 
 namespace TelegramBotNotifierApi.Controllers
@@ -22,9 +25,21 @@ namespace TelegramBotNotifierApi.Controllers
         
         [HttpPost]
         [Route("/[controller]/send_message")]
-        public void SendMessage([FromBody]ApiRequest request)
+        public IActionResult SendMessage([FromBody]ApiRequest request)
         {
-            _notifierService.SendMessage(request.ChatId, request.Message).GetAwaiter().GetResult();
+            try
+            {
+                var response = _notifierService.SendMessage(request.Username, request.Message).GetAwaiter().GetResult();
+                if(response)
+                    return Ok();
+                return NotFound("User don't exist");
+            }
+            catch(Exception ex)
+            {
+                // @FIXME change this response
+                return BadRequest(ex.Message);
+            }
+            
         }
     }
 }

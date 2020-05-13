@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 
 using TelegramBotNotifierApi.Services;
 using TelegramBotNotifierApi.Persistence.Models;
+using TelegramBotNotifierApi.Persistence.Repositories;
 
 
 namespace TelegramBotNotifierApi
@@ -52,6 +53,8 @@ namespace TelegramBotNotifierApi
             });
 
             services.AddSingleton<INotifierBotService, NotifierBotService>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IUserService, UserService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

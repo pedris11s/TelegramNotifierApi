@@ -9,8 +9,9 @@ namespace TelegramBotNotifierApi.Persistence.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+        public int UserId { get; set; }
         public string Username { get; set; }
-        public string ChatId { get; set; }
+        public string FirstName { get; set; }
     }
 
 }

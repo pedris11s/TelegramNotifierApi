@@ -24,20 +24,20 @@ namespace TelegramBotNotifierApi.Controllers
         }
         
         [HttpPost]
-        [Route("/[controller]/sendMessage")]
-        public IActionResult SendMessage([FromBody]ApiRequest request)
+        [Route("/[controller]/user")]
+        public ApiResponse SendMessageUser([FromBody]ApiRequest request)
         {
             try
             {
                 var response = _notifierService.SendMessage(request.Username, request.Message).GetAwaiter().GetResult();
                 if(response)
-                    return Ok();
-                return NotFound("User don't exist");
+                    return ApiResponses.Success(null);
+                
+                return null;
             }
             catch(Exception ex)
             {
-                // @FIXME change this response
-                return BadRequest(ex.Message);
+                return ApiResponses.InternalError(null, ex.Message);
             }
             
         }

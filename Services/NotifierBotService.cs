@@ -44,11 +44,14 @@ namespace TelegramBotNotifierApi.Services
 
             if(e.Message.Text.Equals("/start"))
             {
-                _userService.Create(new User{
-                    UserId = e.Message.From.Id,
-                    Username = e.Message.From.Username,
-                    FirstName = e.Message.From.FirstName
-                });
+                if(_userService.GetUser(e.Message.From.Username) == null)
+                {
+                    _userService.Create(new User{
+                        UserId = e.Message.From.Id,
+                        Username = e.Message.From.Username,
+                        FirstName = e.Message.From.FirstName
+                    });
+                }
             }
         }
 

@@ -14,9 +14,8 @@ namespace TelegramBotNotifierApi.Persistence.Models
 
     public class ApiRequest
     {
-        [Required]
         public string Message { get; set; }  
-        // public string UserId { get; set; }  
+        public string ChannelName { get; set; }  
         public string Username { get; set; }  
     }
 

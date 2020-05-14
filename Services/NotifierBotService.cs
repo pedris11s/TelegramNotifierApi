@@ -10,14 +10,17 @@ namespace TelegramBotNotifierApi.Services
     public interface INotifierBotService
     {
         Task<bool> SendMessage(string username, string message);
+
+        Task<bool> SendMessageToChannel(string channelName, string message);
     }
 
     public class NotifierBotService : INotifierBotService
     {
         ITelegramBotClient _botClient;
         IUserService _userService;
+        IChannelService _channelService;
 
-        public NotifierBotService(IUserService userService)
+        public NotifierBotService(IUserService userService, IChannelService channelService)
         {
             string accessToken = Environment.GetEnvironmentVariable("ACCESS_TOKEN");
             _botClient = new TelegramBotClient(accessToken);
@@ -29,6 +32,7 @@ namespace TelegramBotNotifierApi.Services
             _botClient.StartReceiving();
 
             _userService = userService;
+            _channelService = channelService;
         }
 
         async void OnMessageEvent(object sender, MessageEventArgs e) 
@@ -52,6 +56,35 @@ namespace TelegramBotNotifierApi.Services
                         FirstName = e.Message.From.FirstName
                     });
                 }
+            }
+        }
+
+        public async Task<bool> SendMessageToChannel(string channelName, string message) 
+        {
+            try
+            {
+                var channel = _channelService.GetChannel(channelName);
+                if(channel != null)
+                {
+                    foreach (var user in channel.Users)
+                    {
+                        try
+                        {
+                            var response = SendMessage(user.Username, message).GetAwaiter().GetResult();
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine($"[ERROR] Sending message Channel: {channelName} Username: {user.Username} Text: {message} ERROR: {ex.Message}");
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Sending message Channel: {channelName} Text: {message} ERROR: {ex.Message}");
+                throw ex;
             }
         }
 

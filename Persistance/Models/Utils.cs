@@ -12,7 +12,7 @@ namespace TelegramBotNotifierApi.Persistence.Models
         public string DbConectionString { get; set; }  
     }
 
-    public class ApiRequest
+    public class MessageRequest
     {
         public string Message { get; set; }  
         public string ChannelName { get; set; }  

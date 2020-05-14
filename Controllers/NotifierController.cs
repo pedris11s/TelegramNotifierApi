@@ -25,11 +25,29 @@ namespace TelegramBotNotifierApi.Controllers
         
         [HttpPost]
         [Route("/[controller]/user")]
-        public ApiResponse SendMessageUser([FromBody]ApiRequest request)
+        public ApiResponse SendMessageUser([FromBody]MessageRequest request)
         {
             try
             {
                 var response = _notifierService.SendMessage(request.Username, request.Message).GetAwaiter().GetResult();
+                if(response)
+                    return ApiResponses.Success(null);
+                
+                return null;
+            }
+            catch(Exception ex)
+            {
+                return ApiResponses.InternalError(null, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("/[controller]/channel")]
+        public ApiResponse SendMessageChannel([FromBody]MessageRequest request)
+        {
+            try
+            {
+                var response = _notifierService.SendMessageToChannel(request.Username, request.Message).GetAwaiter().GetResult();
                 if(response)
                     return ApiResponses.Success(null);
                 

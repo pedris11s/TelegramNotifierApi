@@ -24,6 +24,24 @@ namespace TelegramBotNotifierApi.Controllers
             _channelService = channelService;
         }
 
+        [HttpGet]
+        [Route("/[controller]/getChannel/{channelName}")]
+        public ApiResponse Create(string channelName)
+        {
+            try
+            {
+                var response = _channelService.GetChannel(channelName);
+                if(response != null)
+                    return ApiResponses.Success(response);
+             
+                return ApiResponses.NotFound(channelName);
+            }
+            catch(Exception ex)
+            {
+                return ApiResponses.InternalError(null, ex.Message);
+            }
+        }
+
         [HttpPost]
         [Route("/[controller]/create")]
         public ApiResponse Create(Channel input)

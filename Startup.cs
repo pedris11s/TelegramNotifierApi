@@ -23,14 +23,12 @@ namespace TelegramBotNotifierApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, INotifierBotService notifierBotService)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _notifierBotService = notifierBotService;
         }
 
         public IConfiguration Configuration { get; }
-        public INotifierBotService _notifierBotService { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -72,7 +70,7 @@ namespace TelegramBotNotifierApi
                 Environment.SetEnvironmentVariable("ACCESS_TOKEN", config.AccessToken);
                 Environment.SetEnvironmentVariable("TEST_CHAT_ID", config.TestChatId);
                 Environment.SetEnvironmentVariable("DB_CONECTION_STRING", config.DbConectionString);
-                
+
                 app.UseDeveloperExceptionPage();
             }
             else

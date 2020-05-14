@@ -39,11 +39,6 @@ namespace TelegramBotNotifierApi.Services
         {
             Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
             
-            await _botClient.SendTextMessageAsync(
-                chatId: e.Message.Chat,
-                text: "No pierda su tiempo...solo se decir esto, aqui el que habla soy yo, usted solo lee!!!"
-            );
-
             // Console.WriteLine(JsonConvert.SerializeObject(e.Message));
 
             if(e.Message.Text.Equals("/start"))
@@ -55,6 +50,11 @@ namespace TelegramBotNotifierApi.Services
                         Username = e.Message.From.Username,
                         FirstName = e.Message.From.FirstName
                     });
+
+                    await _botClient.SendTextMessageAsync(
+                        chatId: e.Message.Chat,
+                        text: "Bienvenido...ahora puede recibir notificaciones de sus canales. Consulte la API https://notifier-bot-api.herokuapp.com/swagger"
+                    );
                 }
             }
         }

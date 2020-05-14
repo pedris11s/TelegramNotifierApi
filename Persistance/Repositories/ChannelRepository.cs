@@ -50,7 +50,9 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
                 {
                     if(channel.Users == null)
                         channel.Users = new List<User>();
-                        
+                    else
+                        channel.Users = CompleteUserData(channel.Users);
+
                     _channels.InsertOne(channel);
                     Console.WriteLine($"[INFO] Channel: {channel.ChannelName} saved successfully!");
                     return channel;
@@ -63,6 +65,20 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
             return null;
         }
 
+        private List<User> CompleteUserData(List<User> users)
+        {
+            var usersInDb = new List<User>();
+            foreach (var item in users)
+            {
+                var user = _userRepository.GetUser(item.Username);
+                if(user != null)
+                {
+                    usersInDb.Add(user);
+                }
+            }
+            return usersInDb;
+        }
+
         public Channel UpdateUsers(string channelId, List<User> users)
         {
             try
@@ -70,15 +86,7 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
                 var channel = GetChannelById(channelId); 
                 if(channel != null)
                 {
-                    var usersInDb = new List<User>();
-                    foreach (var item in users)
-                    {
-                        var user = _userRepository.GetUser(item.Username);
-                        if(user != null)
-                        {
-                            usersInDb.Add(user);
-                        }
-                    }
+                    var usersInDb = CompleteUserData(users);
 
                     _channels.UpdateOne(p => p.Id == channelId, Builders<Channel>.Update.Set(p => p.Users, usersInDb));
                     

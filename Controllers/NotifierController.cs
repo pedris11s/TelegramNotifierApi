@@ -47,7 +47,7 @@ namespace TelegramBotNotifierApi.Controllers
         {
             try
             {
-                var response = _notifierService.SendMessageToChannel(request.Username, request.Message).GetAwaiter().GetResult();
+                var response = _notifierService.SendMessageToChannel(request.ChannelName, request.Message).GetAwaiter().GetResult();
                 if(response)
                     return ApiResponses.Success(null);
                 

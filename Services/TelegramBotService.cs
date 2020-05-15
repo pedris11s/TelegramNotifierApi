@@ -55,9 +55,8 @@ namespace TelegramBotNotifierApi.Services
                         Username = e.Message.From.Username,
                         FirstName = e.Message.From.FirstName
                     });
-                    
-                    await SendMessage(e.Message.Chat,"Bienvenido...ahora puede recibir notificaciones de sus canales. Consulte la API https://notifier-bot-api.herokuapp.com/swagger");
                 }
+                await SendMessage(e.Message.Chat,"Bienvenido...ahora puede recibir notificaciones de sus canales. Consulte la API https://notifier-bot-api.herokuapp.com/swagger");
             }
         }
     }

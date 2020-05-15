@@ -7,56 +7,24 @@ using Newtonsoft.Json;
 
 namespace TelegramBotNotifierApi.Services
 {
-    public interface INotifierBotService
+    public interface INotifierService
     {
-        Task<bool> SendMessage(string username, string message);
+        Task<bool> SendMessageToUser(string username, string message);
 
         Task<bool> SendMessageToChannel(string channelName, string message);
     }
 
-    public class NotifierBotService : INotifierBotService
+    public class NotifierService : INotifierService
     {
-        ITelegramBotClient _botClient;
+        ITelegramBotService _botService;
         IUserService _userService;
         IChannelService _channelService;
 
-        public NotifierBotService(IUserService userService, IChannelService channelService)
+        public NotifierService(IUserService userService, IChannelService channelService, ITelegramBotService botService)
         {
-            string accessToken = Environment.GetEnvironmentVariable("ACCESS_TOKEN");
-            _botClient = new TelegramBotClient(accessToken);
-            
-            var me = _botClient.GetMeAsync().Result;
-            Console.WriteLine($"[INFO] BotStarted!! Id: {me.Id} Name: {me.FirstName}.");
-
-            _botClient.OnMessage += OnMessageEvent;
-            _botClient.StartReceiving();
-
             _userService = userService;
             _channelService = channelService;
-        }
-
-        async void OnMessageEvent(object sender, MessageEventArgs e) 
-        {
-            Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
-            
-            // Console.WriteLine(JsonConvert.SerializeObject(e.Message));
-
-            if(e.Message.Text.Equals("/start"))
-            {
-                if(_userService.GetUser(e.Message.From.Username) == null)
-                {
-                    _userService.Create(new User{
-                        UserId = e.Message.From.Id,
-                        Username = e.Message.From.Username,
-                        FirstName = e.Message.From.FirstName
-                    });
-
-                    await _botClient.SendTextMessageAsync(
-                        chatId: e.Message.Chat,
-                        text: "Bienvenido...ahora puede recibir notificaciones de sus canales. Consulte la API https://notifier-bot-api.herokuapp.com/swagger"
-                    );
-                }
-            }
+            _botService = botService;
         }
 
         public async Task<bool> SendMessageToChannel(string channelName, string message) 
@@ -70,7 +38,7 @@ namespace TelegramBotNotifierApi.Services
                     {
                         try
                         {
-                            var response = await SendMessage(user.Username, message);
+                            var response = await SendMessageToUser(user.Username, message);
                         }
                         catch(Exception ex)
                         {
@@ -88,7 +56,7 @@ namespace TelegramBotNotifierApi.Services
             }
         }
 
-        public async Task<bool> SendMessage(string username, string message) 
+        public async Task<bool> SendMessageToUser(string username, string message) 
         {
             try
             {
@@ -99,11 +67,8 @@ namespace TelegramBotNotifierApi.Services
                     return false;
                 }
 
-                await _botClient.SendTextMessageAsync(
-                    chatId: user.UserId,
-                    text: message
-                );
-                
+                await _botService.SendMessage(user.UserId, message);
+
                 Console.WriteLine($"[INFO] Sended message Username: {username} Text: {message} ");
                 return true;
             }

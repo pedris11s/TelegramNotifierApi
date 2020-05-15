@@ -14,6 +14,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
+using Telegram.Bot;
+
 using TelegramBotNotifierApi.Services;
 using TelegramBotNotifierApi.Persistence.Models;
 using TelegramBotNotifierApi.Persistence.Repositories;
@@ -52,7 +54,13 @@ namespace TelegramBotNotifierApi
                 }});
             });
 
-            services.AddSingleton<INotifierBotService, NotifierBotService>();
+            services.AddSingleton<ITelegramBotClient>(provider => {
+                return new TelegramBotClient(Environment.GetEnvironmentVariable("ACCESS_TOKEN"));
+            });
+
+            services.AddSingleton<ITelegramBotService, TelegramBotService>();
+            services.AddSingleton<INotifierService, NotifierService>();
+
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IChannelRepository, ChannelRepository>();
@@ -70,7 +78,6 @@ namespace TelegramBotNotifierApi
                 Environment.SetEnvironmentVariable("ACCESS_TOKEN", config.AccessToken);
                 Environment.SetEnvironmentVariable("TEST_CHAT_ID", config.TestChatId);
                 Environment.SetEnvironmentVariable("DB_CONECTION_STRING", config.DbConectionString);
-
                 app.UseDeveloperExceptionPage();
             }
             else

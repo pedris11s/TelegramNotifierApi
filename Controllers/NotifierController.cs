@@ -16,9 +16,9 @@ namespace TelegramBotNotifierApi.Controllers
     [ApiController]
     public class NotifierController : ControllerBase
     {
-        public INotifierBotService _notifierService;
+        public INotifierService _notifierService;
 
-        public NotifierController(INotifierBotService notifierService)
+        public NotifierController(INotifierService notifierService)
         {
             _notifierService = notifierService;
         }
@@ -29,7 +29,7 @@ namespace TelegramBotNotifierApi.Controllers
         {
             try
             {
-                var response = _notifierService.SendMessage(request.Username, request.Message).GetAwaiter().GetResult();
+                var response = _notifierService.SendMessageToUser(request.Username, request.Message).GetAwaiter().GetResult();
                 if(response)
                     return ApiResponses.Success(null);
                 

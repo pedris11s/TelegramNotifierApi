@@ -70,7 +70,7 @@ namespace TelegramBotNotifierApi.Services
                     {
                         try
                         {
-                            var response = SendMessage(user.Username, message).GetAwaiter().GetResult();
+                            var response = await SendMessage(user.Username, message);
                         }
                         catch(Exception ex)
                         {

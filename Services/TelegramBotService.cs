@@ -26,9 +26,6 @@ namespace TelegramBotNotifierApi.Services
             var me = _botClient.GetMeAsync().Result;
             Console.WriteLine($"[INFO] BotStarted!! Id: {me.Id} Name: {me.FirstName}.");
 
-            _botClient.OnMessage += OnMessageEvent;
-            _botClient.StartReceiving();
-
             _userService = userService;
         }
 
@@ -40,24 +37,24 @@ namespace TelegramBotNotifierApi.Services
             );
         }
 
-        async void OnMessageEvent(object sender, MessageEventArgs e) 
-        {
-            Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
+        // async void OnMessageEvent(object sender, MessageEventArgs e) 
+        // {
+        //     Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
             
-            // Console.WriteLine(JsonConvert.SerializeObject(e.Message));
+        //     // Console.WriteLine(JsonConvert.SerializeObject(e.Message));
 
-            if(e.Message.Text.Equals("/start"))
-            {
-                if(_userService.GetUser(e.Message.From.Username) == null)
-                {
-                    _userService.Create(new User{
-                        UserId = e.Message.From.Id,
-                        Username = e.Message.From.Username,
-                        FirstName = e.Message.From.FirstName
-                    });
-                }
-                await SendMessage(e.Message.Chat,"Bienvenido...ahora puede recibir notificaciones de sus canales. Consulte la API https://notifier-bot-api.herokuapp.com/swagger");
-            }
-        }
+        //     if(e.Message.Text.Equals("/start"))
+        //     {
+        //         if(_userService.GetUser(e.Message.From.Username) == null)
+        //         {
+        //             _userService.Create(new User{
+        //                 UserId = e.Message.From.Id,
+        //                 Username = e.Message.From.Username,
+        //                 FirstName = e.Message.From.FirstName
+        //             });
+        //         }
+        //         await SendMessage(e.Message.Chat,"Bienvenido...ahora puede recibir notificaciones de sus canales. Consulte la API https://notifier-bot-api.herokuapp.com/swagger");
+        //     }
+        // }
     }
 }

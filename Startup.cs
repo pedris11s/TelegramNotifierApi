@@ -54,9 +54,9 @@ namespace TelegramBotNotifierApi
                 }});
             });
 
-            var bot = new TelegramBotClient(Environment.GetEnvironmentVariable("ACCESS_TOKEN"));
-
-            services.AddSingleton<ITelegramBotClient>(b => bot);
+            services.AddSingleton<ITelegramBotClient>(provider => {
+                return new TelegramBotClient(Environment.GetEnvironmentVariable("ACCESS_TOKEN"));
+            });
 
             services.AddSingleton<ITelegramBotService, TelegramBotService>();
             services.AddSingleton<INotifierService, NotifierService>();

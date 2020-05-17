@@ -19,9 +19,26 @@ namespace TelegramBotNotifierApi.Controllers
     {
         public IChannelService _channelService;
 
-        public ChannelController(IChannelService channelService)
+        public ITelegramBotService _telegramBotService;
+
+        public ChannelController(IChannelService channelService, ITelegramBotService telegramBotService)
         {
             _channelService = channelService;
+            _telegramBotService = telegramBotService;
+        }
+
+        [HttpGet]
+        [Route("/wakeup")]
+        public ApiResponse WakeUp()
+        {
+            try
+            {
+                return ApiResponses.Success(null);
+            }
+            catch(Exception ex)
+            {
+                return ApiResponses.InternalError(null, ex.Message);
+            }
         }
 
         [HttpGet]

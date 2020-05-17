@@ -25,7 +25,7 @@ namespace TelegramBotNotifierApi.Controllers
         }
 
         [HttpGet]
-        [Route("/[controller]/getChannel/{channelName}")]
+        [Route("/[controller]/get/{channelName}")]
         public ApiResponse Create(string channelName)
         {
             try
@@ -43,7 +43,7 @@ namespace TelegramBotNotifierApi.Controllers
         }
 
         [HttpPost]
-        [Route("/[controller]/create")]
+        [Route("/[controller]/add")]
         public ApiResponse Create(Channel input)
         {
             try

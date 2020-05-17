@@ -24,7 +24,7 @@ namespace TelegramBotNotifierApi.Controllers
         }
         
         [HttpPost]
-        [Route("/[controller]/user")]
+        [Route("/notify/user")]
         public ApiResponse SendMessageUser([FromBody]MessageRequest request)
         {
             try
@@ -42,7 +42,7 @@ namespace TelegramBotNotifierApi.Controllers
         }
 
         [HttpPost]
-        [Route("/[controller]/channel")]
+        [Route("/notify/channel")]
         public ApiResponse SendMessageChannel([FromBody]MessageRequest request)
         {
             try

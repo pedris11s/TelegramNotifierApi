@@ -55,8 +55,17 @@ namespace TelegramBotNotifierApi.Services
                         Username = e.Message.From.Username,
                         FirstName = e.Message.From.FirstName
                     });
-                    
+
                     await SendMessage(e.Message.Chat,"Bienvenido...ahora puede recibir notificaciones de sus canales. Consulte la API https://notifier-bot-api.herokuapp.com/swagger");
+
+                    var admin = _userService.GetUser("pedris11s");
+                    
+                    await SendMessage(new Chat{
+                        Id = admin.UserId,
+                        Username = admin.Username
+                    }, $"Nuevo usuario registrado!\n Id: {e.Message.Chat.Id}\n Username: @{e.Message.Chat.Username}\n FirstName: {e.Message.Chat.FirstName}\n");
+                    
+                    
                 }
             }
         }

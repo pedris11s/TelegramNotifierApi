@@ -1,5 +1,6 @@
 using TelegramBotNotifierApi.Persistence.Models;
 using System;
+using System.Collections.Generic;
 using TelegramBotNotifierApi.Persistence.Repositories;
 using Microsoft.Extensions.Options;
 
@@ -7,6 +8,7 @@ namespace TelegramBotNotifierApi.Services
 {
     public interface IUserService
     {
+        List<User> GetAll();
         User GetUser(string username);
         void Create(User user);
     }
@@ -18,6 +20,11 @@ namespace TelegramBotNotifierApi.Services
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+        }
+
+        public List<User> GetAll()
+        {
+            return _userRepository.GetAll();
         }
 
         public void Create(User user)

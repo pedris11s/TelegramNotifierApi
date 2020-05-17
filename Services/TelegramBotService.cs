@@ -46,6 +46,28 @@ namespace TelegramBotNotifierApi.Services
             
             // Console.WriteLine(JsonConvert.SerializeObject(e.Message));
 
+            // @FIXME improove this
+            if(e.Message.Text.ToLower().Contains("users"))
+            {
+                if(e.Message.From.Username.Equals("pedris11s"))
+                {
+                    var admin = _userService.GetUser("pedris11s");
+                    var users = _userService.GetAll();
+                    
+                    string msg = $"Usuarios registrados({users.Count}):\n\n";
+
+                    int cont = 1;
+                    users.ForEach(u => {
+                        msg += $" {cont++}) UserId: {u.UserId}\n Username: @{u.Username}\n FirstName: {u.FirstName}\n\n";
+                    });
+
+                    await SendMessage(new Chat{
+                        Id = admin.UserId,
+                        Username = admin.Username
+                    }, msg);
+                }
+            }
+
             if(e.Message.Text.Equals("/start"))
             {
                 if(_userService.GetUser(e.Message.From.Username) == null)

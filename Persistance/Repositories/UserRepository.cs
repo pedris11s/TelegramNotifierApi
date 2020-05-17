@@ -10,6 +10,7 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
 {
     public interface IUserRepository
     {
+        List<User> GetAll();
         void Create(User user);
         User GetUser(string username);
     }
@@ -25,6 +26,11 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
             _client = new MongoClient(Environment.GetEnvironmentVariable("DB_CONECTION_STRING"));
             _database = _client.GetDatabase("NotifierBotDb");
             _users = _database.GetCollection<User>("Users");
+        }
+
+        public List<User> GetAll()
+        {
+            return _users.Find(u => true).ToList();
         }
 
         public User GetUser(int userId)

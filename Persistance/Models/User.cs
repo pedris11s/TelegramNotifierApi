@@ -1,4 +1,5 @@
 
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -12,6 +13,7 @@ namespace TelegramBotNotifierApi.Persistence.Models
         public int UserId { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
     }
 
 }

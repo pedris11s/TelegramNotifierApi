@@ -4,6 +4,9 @@ services:
   blog-backend:
     build:
       context: .
+      args:
+        - ACCESS_TOKEN=$ACCESS_TOKEN
+        - DB_CONECTION_STRING=$DB_CONECTION_STRING
     restart: always
     ports:
       - "127.0.0.1:${BOT_PORT}:5000"

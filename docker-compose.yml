@@ -9,4 +9,4 @@ services:
         - DB_CONECTION_STRING=$DB_CONECTION_STRING
     restart: always
     ports:
-      - "127.0.0.1:${BOT_PORT}:5000"
+      - "127.0.0.1:${BOT_PORT}:80"

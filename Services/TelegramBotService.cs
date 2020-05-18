@@ -18,8 +18,9 @@ namespace TelegramBotNotifierApi.Services
     {
         ITelegramBotClient _botClient;
         IUserService _userService;
+        IHelperService _helperService;
 
-        public TelegramBotService(IUserService userService, ITelegramBotClient botClient)
+        public TelegramBotService(IUserService userService, ITelegramBotClient botClient, IHelperService helperService)
         {
             _botClient = botClient;
             
@@ -30,6 +31,7 @@ namespace TelegramBotNotifierApi.Services
             _botClient.StartReceiving();
 
             _userService = userService;
+            _helperService = helperService;
         }
 
         public async Task SendMessage(ChatId chatId, string message)
@@ -44,52 +46,28 @@ namespace TelegramBotNotifierApi.Services
         {
             Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
             
-            // Console.WriteLine(JsonConvert.SerializeObject(e.Message));
-
-            // @FIXME improove this
             if(e.Message.Text.ToLower().Contains("users"))
             {
-                if(e.Message.From.Username.Equals("pedris11s"))
+                string msg = _helperService.GetUsersCommand(e.Message);
+                if(msg != null)
                 {
-                    var admin = _userService.GetUser("pedris11s");
-                    var users = _userService.GetAll();
-                    
-                    string msg = $"Usuarios registrados({users.Count}):\n\n";
-
-                    int cont = 1;
-                    users.ForEach(u => {
-                        msg += $" {cont++}) UserId: {u.UserId}\n Username: @{u.Username}\n FirstName: {u.FirstName}\n\n";
-                    });
-
-                    await SendMessage(new Chat{
-                        Id = admin.UserId,
-                        Username = admin.Username
-                    }, msg);
+                    await SendMessage(e.Message.Chat, msg);
                 }
             }
 
             if(e.Message.Text.Equals("/start"))
             {
-                if(_userService.GetUser(e.Message.From.Username) == null)
+                var admin = _helperService.StartCommand(e.Message);
+                if(admin != null)
                 {
-                    _userService.Create(new User{
-                        UserId = e.Message.From.Id,
-                        Username = e.Message.From.Username,
-                        FirstName = e.Message.From.FirstName
-                    });
-                    
-                    Console.WriteLine($"[INFO] Nuevo usuario registrado!\n Id: {e.Message.Chat.Id}\n Username: @{e.Message.Chat.Username}\n FirstName: {e.Message.Chat.FirstName}\n");
+                    string msg = "Bienvenido...ahora puede recibir notificaciones mediante nuestra API. Visite nuestro repositorio para mas info: https://github.com/pedris11s/TelegramNotifierApi" ;
+                    await SendMessage(e.Message.Chat, msg);
 
-                    await SendMessage(e.Message.Chat,"Bienvenido...ahora puede recibir notificaciones de sus canales. Consulte la API https://notifier-bot-api.herokuapp.com/swagger");
-
-                    var admin = _userService.GetUser("pedris11s");
-                    
+                    msg = $"Nuevo usuario registrado!\n Id: {e.Message.Chat.Id}\n Username: @{e.Message.Chat.Username}\n FirstName: {e.Message.Chat.FirstName}\n";
                     await SendMessage(new Chat{
                         Id = admin.UserId,
                         Username = admin.Username
-                    }, $"Nuevo usuario registrado!\n Id: {e.Message.Chat.Id}\n Username: @{e.Message.Chat.Username}\n FirstName: {e.Message.Chat.FirstName}\n");
-                    
-                    
+                    }, msg);
                 }
             }
         }

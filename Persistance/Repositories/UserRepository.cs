@@ -13,6 +13,7 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
         List<User> GetAll();
         void Create(User user);
         User GetUser(string username);
+        User GetUser(int userId);
     }
 
     public class UserRepository : IUserRepository

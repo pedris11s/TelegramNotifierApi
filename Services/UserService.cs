@@ -10,6 +10,7 @@ namespace TelegramBotNotifierApi.Services
     {
         List<User> GetAll();
         User GetUser(string username);
+        User GetUser(int userId);
         void Create(User user);
     }
 
@@ -44,6 +45,20 @@ namespace TelegramBotNotifierApi.Services
             try
             {
                 var user = _userRepository.GetUser(username);
+                return user;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"[ERROR] GetUser: {ex.Message}");
+                throw ex;
+            }
+        }
+
+        public User GetUser(int userId)
+        {
+            try
+            {
+                var user = _userRepository.GetUser(userId);
                 return user;
             }
             catch(Exception ex)

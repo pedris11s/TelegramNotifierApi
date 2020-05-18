@@ -1,8 +1,7 @@
-# TelegramBotNotifierApi
 
-**TelegramBotNotifierApi** is a Rest API that allows to send notifications through [Telegram](https://www.telegram.org).
+# TelegramNotifierApi
 
-For this, it makes use of the bot [NotifierBot](https://t.me/AwesomeNotifierBot) to which the users must be subscribed for the notification to reach them.
+**TelegramNotifierApi** es una API REST que permite enviar notificaciones mediante [Telegram](https://www.telegram.org) utilizando el bot [EasyNotifierBot](https://t.me/EasyNotifierBot).
 
-# How to use
-In this link the API documentation is available through Swagger. [API Documentation](https://notifier-bot-api.herokuapp.com/swagger)
+Puede revisar la documentacion de la api en el siguiente enlace. [API Doc](https://botnotifier.binary-coffee.dev/swagger/)
+

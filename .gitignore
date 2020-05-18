@@ -2,3 +2,6 @@
 /obj
 /.vscode
 key.json
+.env
+
+.idea

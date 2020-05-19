@@ -38,6 +38,7 @@ namespace TelegramBotNotifierApi.Services
                     {
                         try
                         {
+                            message = $"*Message via channel* #{channelName}\n\n" + message; 
                             var response = await SendMessageToUser(user.Username, message);
                         }
                         catch(Exception ex)

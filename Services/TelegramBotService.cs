@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Args;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using TelegramBotNotifierApi.Persistence.Models;
 
 using User = TelegramBotNotifierApi.Persistence.Models.User;
@@ -38,7 +40,8 @@ namespace TelegramBotNotifierApi.Services
         {
             await _botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: message
+                text: message,
+                parseMode: ParseMode.Markdown
             );
         }
 

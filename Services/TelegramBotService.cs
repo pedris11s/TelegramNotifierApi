@@ -49,16 +49,16 @@ namespace TelegramBotNotifierApi.Services
         {
             Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
             
-            if(e.Message.Text.ToLower().Contains("users"))
+            if(e.Message.Text != null &&  e.Message.Text.ToLower().Contains("users"))
             {
                 string msg = _helperService.GetUsersCommand(e.Message);
                 if(msg != null)
                 {
-                    await SendMessage(e.Message.Chat, msg);
+                    // await SendMessage(e.Message.Chat, msg);
                 }
             }
 
-            if(e.Message.Text.Equals("/start"))
+            if(e.Message.Text != null && e.Message.Text.Equals("/start"))
             {
                 var admin = _helperService.StartCommand(e.Message);
                 if(admin != null)

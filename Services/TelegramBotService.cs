@@ -48,33 +48,45 @@ namespace TelegramBotNotifierApi.Services
 
         async void OnMessageEvent(object sender, MessageEventArgs e) 
         {
-            Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
-            
-            // await SendMessage(e.Message.Chat, "https://binary-coffee.dev/post/configuremos-un-servidor-de-correo-con-docker-mailu");
-
-            if(e.Message.Text != null &&  e.Message.Text.ToLower().Contains("users"))
+            try
             {
-                string msg = _helperService.GetUsersCommand(e.Message);
-                if(msg != null)
+                Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
+            
+                // await SendMessage(e.Message.Chat, "https://binary-coffee.dev/post/configuremos-un-servidor-de-correo-con-docker-mailu");
+
+                if(e.Message.Chat.Type == ChatType.Supergroup)
                 {
-                    // await SendMessage(e.Message.Chat, msg);
+                    
+                }
+
+                if(e.Message.Text != null &&  e.Message.Text.ToLower().Contains("users"))
+                {
+                    string msg = _helperService.GetUsersCommand(e.Message);
+                    if(msg != null)
+                    {
+                        // await SendMessage(e.Message.Chat, msg);
+                    }
+                }
+
+                if(e.Message.Text != null && e.Message.Text.Equals("/start"))
+                {
+                    var admin = _helperService.StartCommand(e.Message);
+                    if(admin != null)
+                    {
+                        string msg = "Bienvenido...ahora puede recibir notificaciones mediante nuestra API. Visite nuestro repositorio para mas info: https://github.com/pedris11s/TelegramNotifierApi" ;
+                        await SendMessage(e.Message.Chat, msg);
+
+                        msg = $"Nuevo usuario registrado!\n Id: {e.Message.Chat.Id}\n Username: @{e.Message.Chat.Username}\n FirstName: {e.Message.Chat.FirstName}\n";
+                        await SendMessage(new Chat{
+                            Id = admin.UserId,
+                            Username = admin.Username
+                        }, msg);
+                    }
                 }
             }
-
-            if(e.Message.Text != null && e.Message.Text.Equals("/start"))
+            catch(Exception ex)
             {
-                var admin = _helperService.StartCommand(e.Message);
-                if(admin != null)
-                {
-                    string msg = "Bienvenido...ahora puede recibir notificaciones mediante nuestra API. Visite nuestro repositorio para mas info: https://github.com/pedris11s/TelegramNotifierApi" ;
-                    await SendMessage(e.Message.Chat, msg);
-
-                    msg = $"Nuevo usuario registrado!\n Id: {e.Message.Chat.Id}\n Username: @{e.Message.Chat.Username}\n FirstName: {e.Message.Chat.FirstName}\n";
-                    await SendMessage(new Chat{
-                        Id = admin.UserId,
-                        Username = admin.Username
-                    }, msg);
-                }
+                Console.WriteLine(ex.Message);
             }
         }
     }

@@ -30,7 +30,7 @@ namespace TelegramBotNotifierApi.Services
             if(_userService.GetUser(msg.From.Id) == null)
             {
                 _userService.Create(new User{
-                    UserId = msg.From.Id,
+                    UserId = (long)(msg.From.Id),
                     Username = msg.From.Username,
                     FirstName = msg.From.FirstName
                 });

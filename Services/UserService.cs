@@ -10,7 +10,7 @@ namespace TelegramBotNotifierApi.Services
     {
         List<User> GetAll();
         User GetUser(string username);
-        User GetUser(int userId);
+        User GetUser(long userId);
         void Create(User user);
     }
 
@@ -54,7 +54,7 @@ namespace TelegramBotNotifierApi.Services
             }
         }
 
-        public User GetUser(int userId)
+        public User GetUser(long userId)
         {
             try
             {

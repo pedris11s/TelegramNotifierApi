@@ -13,7 +13,7 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
         List<User> GetAll();
         void Create(User user);
         User GetUser(string username);
-        User GetUser(int userId);
+        User GetUser(long userId);
     }
 
     public class UserRepository : IUserRepository
@@ -34,7 +34,7 @@ namespace TelegramBotNotifierApi.Persistence.Repositories
             return _users.Find(u => true).ToList();
         }
 
-        public User GetUser(int userId)
+        public User GetUser(long userId)
         {
             return _users.Find(u => u.UserId == userId).FirstOrDefault();
         }

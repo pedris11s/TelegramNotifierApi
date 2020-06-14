@@ -41,7 +41,8 @@ namespace TelegramBotNotifierApi.Services
             await _botClient.SendTextMessageAsync(
                 chatId: chatId,
                 text: message,
-                parseMode: ParseMode.Markdown
+                parseMode: ParseMode.Markdown,
+                disableWebPagePreview: true
             );
         }
 
@@ -49,6 +50,8 @@ namespace TelegramBotNotifierApi.Services
         {
             Console.WriteLine($"[INFO] Received a text message in chat id: {e.Message.Chat.Id} name: {e.Message.Chat.FirstName} Text: {e.Message.Text}.");
             
+            // await SendMessage(e.Message.Chat, "https://binary-coffee.dev/post/configuremos-un-servidor-de-correo-con-docker-mailu");
+
             if(e.Message.Text != null &&  e.Message.Text.ToLower().Contains("users"))
             {
                 string msg = _helperService.GetUsersCommand(e.Message);
